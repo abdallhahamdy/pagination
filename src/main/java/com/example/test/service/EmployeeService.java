@@ -27,25 +27,22 @@ public class EmployeeService {
     }
 
 
-    public List<Employee> getUsersByPagination(int pageNo, int pageSize) {
-
-//        Sort phoneSort = Sort.by("phone");
-//        Sort nameSort = Sort.by("id");
+//    public List<Employee> getUsersByPagination(int pageNo, int pageSize) {
 //
-//        Sort multiSort = phoneSort.and(nameSort);
-
-        //create pagerequest object
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
-
-//        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, multiSort);
-
-        //pass it to repos
-        Page<Employee> pagingUser = employeeRepo.findAll(pageRequest);
-        //pagingUser.hasContent(); -- to check pages are there or not
-
-
-
-
-        return pagingUser.getContent();
-    }
+////        Sort phoneSort = Sort.by("phone");
+////        Sort nameSort = Sort.by("id");
+////
+////        Sort multiSort = phoneSort.and(nameSort);
+//
+//        //create pagerequest object
+//        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
+//
+////        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, multiSort);
+//
+//        //pass it to repos
+//        Page<Employee> pagingUser = employeeRepo.findAll(pageRequest);
+//        //pagingUser.hasContent(); -- to check pages are there or not
+//
+//        return pagingUser.getContent();
+//    }
 }
