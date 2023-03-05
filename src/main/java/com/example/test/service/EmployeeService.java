@@ -2,14 +2,24 @@ package com.example.test.service;
 
 import com.example.test.dao.EmployeeRepo;
 import com.example.test.entity.Employee;
+import com.example.test.payload.EmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
@@ -17,32 +27,33 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
 
-    public Employee insert(Employee emp) {
-        return employeeRepo.save(emp);
-    }
+    public EmployeeResponse getAllEmployees(String address, int page, int size, String sortBy, String sortDir) {
 
-    public Employee findById (Long id) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
-        return employeeRepo.findById(id).orElseThrow();
-    }
+            List<Employee> employees = new ArrayList<Employee>();
+            Pageable pagingSort = PageRequest.of(page, size, sort);
+
+            Page<Employee> pageTuts;
+            if (address == null)
+                pageTuts = employeeRepo.findAll(pagingSort);
+            else
+                pageTuts = employeeRepo.findByAddressContaining(address, pagingSort);
+
+            employees = pageTuts.getContent();
 
 
-//    public List<Employee> getUsersByPagination(int pageNo, int pageSize) {
-//
-////        Sort phoneSort = Sort.by("phone");
-////        Sort nameSort = Sort.by("id");
-////
-////        Sort multiSort = phoneSort.and(nameSort);
-//
-//        //create pagerequest object
-//        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
-//
-////        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, multiSort);
-//
-//        //pass it to repos
-//        Page<Employee> pagingUser = employeeRepo.findAll(pageRequest);
-//        //pagingUser.hasContent(); -- to check pages are there or not
-//
-//        return pagingUser.getContent();
-//    }
+            EmployeeResponse employeeResponse = new EmployeeResponse();
+
+            employeeResponse.setContent(employees);
+            employeeResponse.setPage(pageTuts.getNumber());
+            employeeResponse.setSize(pageTuts.getSize());
+            employeeResponse.setTotalElements(pageTuts.getTotalElements());
+            employeeResponse.setTotalPages(pageTuts.getTotalPages());
+
+            return employeeResponse;
+
+
+        }
 }

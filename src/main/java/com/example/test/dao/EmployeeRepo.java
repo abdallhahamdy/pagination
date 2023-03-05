@@ -15,10 +15,6 @@ import java.util.List;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 
-    Page<Employee> findByAddress(String address, Pageable pageable);
+    Page<Employee> findByAddressContaining(String address, Pageable pageable);
 
-    Page<Employee> findByNameContaining(String name, Pageable pageable);
-
-
-    List<Employee> findByPhoneContaining(Long phone, Sort sort);
 }
